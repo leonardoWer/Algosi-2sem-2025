@@ -33,7 +33,9 @@ def count_beautiful_patterns(M, N):
 
 
 if __name__ == "__main__":
-    lst = utils.read_file(PATH)[0].split()
-    M, N = int(lst[0]), int(lst[1])
-    result = count_beautiful_patterns(M, N)
-    utils.write_file(PATH, [result])
+    lst1 = utils.read_file(PATH)[0].split()
+    lst2 = utils.read_file(PATH)[1].split()
+    M1, N1, M2, N2 = int(lst1[0]), int(lst1[1]), int(lst2[0]), int(lst2[1])
+    result1 = count_beautiful_patterns(M1, N1)
+    result2 = count_beautiful_patterns(M2, N2)
+    utils.write_file(PATH, [result1, result2])
