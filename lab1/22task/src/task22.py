@@ -31,7 +31,7 @@ def count_beautiful_patterns(M, N):
 with open("input.txt", "r") as f:
     M, N = map(int, f.readline().split())
 
-# Вычисляем количество симпатичных узоров
+# Формируем ответ
 result = count_beautiful_patterns(M, N)
 
 # Записываем результат
