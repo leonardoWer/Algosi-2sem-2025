@@ -14,7 +14,7 @@ OUTPUT_RELATIVE_PATH = "../txtfiles/output.txt"
 
 # Функции для работы с файлами
 
-def read_file(path:str = INPUT_RELATIVE_PATH):
+def read_file(path:str = INPUT_RELATIVE_PATH) -> list:
     """
     Функция считывает данные с файла
      - Возвращает: (список строк с данными)
