@@ -1,4 +1,9 @@
 from itertools import product
+from utils import utils
+import os
+
+
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 def is_valid_pattern(grid, M, N):
@@ -27,13 +32,8 @@ def count_beautiful_patterns(M, N):
     return total_count
 
 
-# Читаем входные данные
-with open("input.txt", "r") as f:
-    M, N = map(int, f.readline().split())
-
-# Формируем ответ
-result = count_beautiful_patterns(M, N)
-
-# Записываем результат
-with open("output.txt", "w") as f:
-    f.write(str(result) + "\n")
+if __name__ == "__main__":
+    lst = utils.read_file(PATH)[0].split()
+    M, N = int(lst[0]), int(lst[1])
+    result = count_beautiful_patterns(M, N)
+    utils.write_file(PATH, [result])
