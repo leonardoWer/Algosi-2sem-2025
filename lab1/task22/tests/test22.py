@@ -42,5 +42,23 @@ class TestCountInversion(unittest.TestCase):
         self.assertEqual(result, expect_result)
         self.assertLessEqual(result_time.total_seconds(), expected_time, f"Значение {result_time} превышает порог {expected_time}")
 
+    def test_3(self):
+        # given
+        m, n = 1, 1
+        expect_result = 2
+        expected_time = 4
+
+        # when
+        start_time = datetime.datetime.now()
+        result = count_beautiful_patterns(m, n)
+        finish_time = datetime.datetime.now()
+        result_time = finish_time - start_time
+        print("Тест2.Итоговое время алгоритма:", result_time)
+
+        # then
+        self.assertEqual(result, expect_result)
+        self.assertLessEqual(result_time.total_seconds(), expected_time, f"Значение {result_time} превышает порог {expected_time}")
+
+
 if __name__ == '__main__':
     unittest.main()
