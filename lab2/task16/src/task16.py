@@ -1,43 +1,67 @@
-from itertools import product
+"""
+Напишите программу, реализующую структуру данных, позволяющую добавлять и удалять элементы, а также
+находить k-й максимум
+"""
+
 from utils import utils
 import os
-
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-def is_valid_pattern(grid, M, N):
-    """Проверяет, нет ли в узоре квадрата 2×2 одного цвета."""
-    for i in range(M - 1):
-        for j in range(N - 1):
-            # Проверяем 2×2 квадрат, равны ли все цвета каждого элемента
-            if grid[i][j] == grid[i + 1][j] == grid[i][j + 1] == grid[i + 1][j + 1]:
-                # Если они равны, значить узор не является "симпатичным"
-                return False
-    # В противном случае все хорошо, узор подходит
-    return True
+class KMax:
+    data = []
+    output_data = []
+
+    def handle_list_input_data(self, commands_cnt: int, commands_list: list) -> list:
+        handled_commands_list = []
+        for i in range(commands_cnt):
+            command_name, command_index = map(int, commands_list[i].split())
+            handled_commands_list.append([command_name, command_index])
+
+        return handled_commands_list
+
+    def handle_commands_list(self, commands_cnt: int, commands_list: list):
+        handled_commands_list = self.handle_list_input_data(commands_cnt, commands_list)
+        for operation in handled_commands_list:
+            command, key = operation[0], operation[1]
+            if command > 0:
+                self.add_el_with_k_key(key)
+            elif command < 0:
+                self.remove_el_with_k_key(key)
+            else:
+                self.find_and_get_k_max(key)
+
+    def add_el_with_k_key(self, key):
+        self.data.append(key)
+
+    def find_and_get_k_max(self, key):
+        if not self.data:
+            raise Exception
+
+        sorted_data = sorted(self.data, reverse=True)
+        if key <= len(sorted_data):
+            self.output_data.append(sorted_data[key - 1])
+
+    def remove_el_with_k_key(self, key):
+        try:
+            self.data.remove(key)
+        except ValueError:
+            pass  # Игнорируем, если элемента нет (по условию гарантируется, что его не будет)
+
+    def get_output_data(self):
+        return self.output_data
 
 
-def count_beautiful_patterns(M, N):
-    """Подсчитывает количество симпатичных узоров, чтобы узнать, сколько клиентов можно будет обслужить"""
-    total_count = 0
-
-    # генерируем и перебираем все возможные варианты расстановки плиток
-    for bits in product([0, 1], repeat=M * N):
-        # создаем матрицу MxN (выкладываем плитки) (двумерный массив)
-        grid = [[bits[i * N + j] for j in range(N)] for i in range(M)]
-
-        # Проверяем на "симпатичность"
-        if is_valid_pattern(grid, M, N):
-            total_count += 1
-
-    return total_count
+def main():
+    lst = utils.read_file(PATH)
+    commands_cnt = int(lst[0])
+    commands_list = lst[1:]
+    kmax = KMax()
+    kmax.handle_commands_list(commands_cnt, commands_list)
+    return kmax.get_output_data()
 
 
 if __name__ == "__main__":
-    lst1 = utils.read_file(PATH)[0].split()
-    lst2 = utils.read_file(PATH)[1].split()
-    M1, N1, M2, N2 = int(lst1[0]), int(lst1[1]), int(lst2[0]), int(lst2[1])
-    result1 = count_beautiful_patterns(M1, N1)
-    result2 = count_beautiful_patterns(M2, N2)
-    utils.write_file(PATH, [result1, result2])
+    result = main()
+    utils.write_file(PATH, result, True)
