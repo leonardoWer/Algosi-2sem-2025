@@ -6,7 +6,7 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 
 def find_tree_height(tree, root):
     """Рекурсивный поиск высоты дерева"""
-    if root == 0: #если узел отсутствует то высота дерева = 0
+    if root == 0:  # если узел отсутствует то высота дерева = 0
         return 0
     # в обратном случае находим высоту поддеревьев и возвращаем максимум + 1 (корень)
     left = tree[root][1]
@@ -16,8 +16,8 @@ def find_tree_height(tree, root):
 
 def main():
     # Читаем данные из файла
-    lst = utils.read_file(PATH) #строки
-    N = int(lst[0])  #количество вершин
+    lst = utils.read_file(PATH)  # строки
+    N = int(lst[0])  # количество вершин
 
     if N == 0:
         utils.write_file(PATH, ["0"])
@@ -26,10 +26,10 @@ def main():
     # строим дерево
 
     tree = {}
-    children = set() #дочерние узлы
+    children = set()  # дочерние узлы
 
     for i in range(1, N + 1):
-        key, left, right = map(int, lst[i].split()) #узел и потомки
+        key, left, right = map(int, lst[i].split())  # узел и потомки
         tree[i] = (key, left, right)
         if left > 0:
             children.add(left)
