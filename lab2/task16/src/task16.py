@@ -1,6 +1,6 @@
 """
-Напишите программу, реализующую структуру данных, позволяющую добавлять и удалять элементы, а также
-находить k-й максимум
+Напишите программу, реализующую структуру данных, позволяющую добавлять и удалять элементы
+а также находить k-й максимум
 """
 
 from utils import utils
@@ -10,10 +10,11 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class KMax:
-    data = []
-    output_data = []
+    data = []  # Список для хранения данных
+    output_data = []  # Список для хранения выходных данных(при вводе команды 0)
 
     def handle_list_input_data(self, commands_cnt: int, commands_list: list) -> list:
+        """Переводит список команд в удобный вид"""
         handled_commands_list = []
         for i in range(commands_cnt):
             command_name, command_index = map(int, commands_list[i].split())
@@ -22,6 +23,7 @@ class KMax:
         return handled_commands_list
 
     def handle_commands_list(self, commands_cnt: int, commands_list: list):
+        """Обрабатывает команды, поданные на вход в списке"""
         handled_commands_list = self.handle_list_input_data(commands_cnt, commands_list)
         for operation in handled_commands_list:
             command, key = operation[0], operation[1]
@@ -37,10 +39,15 @@ class KMax:
 
     def find_and_get_k_max(self, key):
         if not self.data:
-            raise Exception
+            raise IndexError
 
-        sorted_data = sorted(self.data, reverse=True)
+        sorted_data = sorted(self.data, reverse=True)  # Ключевой шаг, сортируем элементы по убыванию в новый список
         if key <= len(sorted_data):
+            """
+            Извлечение k-го максимума. Поскольку нумерация элементов в списке начинается с 0, 
+            а key обозначает порядковый номер (начиная с 1), для доступа к нужному элементу используется индекс key - 1. 
+            Найденный k-й максимум добавляется в список выходных данных.
+            """
             self.output_data.append(sorted_data[key - 1])
 
     def remove_el_with_k_key(self, key):
