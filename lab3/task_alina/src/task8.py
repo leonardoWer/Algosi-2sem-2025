@@ -1,49 +1,54 @@
-from utils import utils
 import os
+import heapq
 
-PATH = os.path.dirname(os.path.abspath(__file__))
+
+def dijkstra(n, graph, start, end):
+    """Алгоритм Дейкстры для поиска кратчайшего пути"""
+    INF = float('inf')
+    dist = [INF] * (n + 1)
+    dist[start] = 0
+    pq = [(0, start)]  # (стоимость, узел)
+
+    while pq:
+        curr_cost, node = heapq.heappop(pq)
+
+        if curr_cost > dist[node]:
+            continue
+
+        for neighbor, weight in graph[node]:
+            new_cost = curr_cost + weight
+            if new_cost < dist[neighbor]:
+                dist[neighbor] = new_cost
+                heapq.heappush(pq, (new_cost, neighbor))
+
+    return dist[end] if dist[end] != INF else -1
 
 
-def find_tree_height(tree, root):
-    """Рекурсивный поиск высоты дерева"""
-    if root == 0:  # если узел отсутствует то высота дерева = 0
-        return 0
-    # в обратном случае находим высоту поддеревьев и возвращаем максимум + 1 (корень)
-    left = tree[root][1]
-    right = tree[root][2]
-    return 1 + max(find_tree_height(tree, left), find_tree_height(tree, right))
+def read_file(path):
+    """Читает входные данные из файла"""
+    with open(os.path.join(path, "input.txt"), "r") as file:
+        return file.readlines()
+
+
+def write_file(path, data):
+    """Записывает выходные данные в файл"""
+    with open(os.path.join(path, "output.txt"), "w") as file:
+        file.writelines(data)
 
 
 def main():
-    # Читаем данные из файла
-    lst = utils.read_file(PATH)  # строки
-    N = int(lst[0])  # количество вершин
+    path = os.path.dirname(os.path.abspath(__file__))
+    lst = read_file(path)
+    n, m = map(int, lst[0].split())
+    graph = {i: [] for i in range(1, n + 1)}
 
-    if N == 0:
-        utils.write_file(PATH, ["0"])
-        return
+    for i in range(1, m + 1):
+        a, b, w = map(int, lst[i].split())
+        graph[a].append((b, w))
 
-    # строим дерево
-
-    tree = {}
-    children = set()  # дочерние узлы
-
-    for i in range(1, N + 1):
-        key, left, right = map(int, lst[i].split())  # узел и потомки
-        tree[i] = (key, left, right)
-        if left > 0:
-            children.add(left)
-        if right > 0:
-            children.add(right)
-
-    # Определяем корень, вычитая все дочерние узлы, оставляя только корень
-    root = (set(range(1, N + 1)) - children).pop()
-
-    # Вычисляем высоту дерева
-    height = find_tree_height(tree, root)
-
-    # Записываем результат в файл
-    utils.write_file(PATH, [str(height)])
+    u, v = map(int, lst[m + 1].split())
+    result = dijkstra(n, graph, u, v)
+    write_file(path, [str(result) + "\n"])
 
 
 if __name__ == "__main__":
